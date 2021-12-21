@@ -19,13 +19,14 @@ class Ship implements ShipInterface {
       position < 0 ||
       position > this.length - 1 ||
       this.hits.includes(position)
-    )
+    ) {
       return;
+    }
     this.hits.push(position);
   }
 
   isSunk() {
-    return true;
+    return this.length === this.hits.length;
   }
 }
 

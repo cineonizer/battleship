@@ -34,8 +34,22 @@ describe('The ship', () => {
   });
 
   test('is not hit in the same position more than once', () => {
-    ship.hit(0)
-    ship.hit(0)
-    expect(ship.hits).toEqual([0])
-  })
+    ship.hit(0);
+    ship.hit(0);
+    expect(ship.hits).toEqual([0]);
+  });
+
+  test('is sunk', () => {
+    ship.hit(0);
+    ship.hit(1);
+    ship.hit(2);
+    ship.hit(3);
+    ship.hit(4);
+    expect(ship.isSunk()).toBe(true);
+  });
+
+  test('is not sunk', () => {
+    ship.hit(3);
+    expect(ship.isSunk()).toBe(false);
+  });
 });
