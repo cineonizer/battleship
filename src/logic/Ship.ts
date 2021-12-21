@@ -6,7 +6,7 @@ interface ShipInterface {
 }
 
 class Ship implements ShipInterface {
-  length: number;
+  readonly length: number;
   hits: number[];
 
   constructor(length: number) {
@@ -15,11 +15,17 @@ class Ship implements ShipInterface {
   }
 
   hit(position: number) {
-    return
+    if (
+      position < 0 ||
+      position > this.length - 1 ||
+      this.hits.includes(position)
+    )
+      return;
+    this.hits.push(position);
   }
 
   isSunk() {
-    return true
+    return true;
   }
 }
 
