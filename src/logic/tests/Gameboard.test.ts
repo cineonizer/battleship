@@ -58,4 +58,17 @@ describe('The gameboard', () => {
     testBoard[5][1] = battleship;
     expect(game.board).toEqual(testBoard);
   });
+
+  test('does not place a ship out of bounds', () => {
+    expect(game.placeShip(cruiser, 10, 10, false)).toBe('Invalid Placement');
+  });
+
+  test('does not place a ship that runs out of bounds', () => {
+    expect(game.placeShip(submarine, 8, 8, false)).toBe('Invalid Placement');
+  });
+
+  xtest('does not place a ship on occupied spaces', () => {
+    game.placeShip(destroyer, 4, 7, true)
+    expect(game.placeShip(battleship, 5, 4, false)).toBe('Invalid Placement');
+  });
 });

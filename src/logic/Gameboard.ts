@@ -23,7 +23,7 @@ class Gameboard implements GameboardInterface {
   }
 
   placeShip(ship: Ship, row: number, col: number, isVertical: boolean) {
-    if (!this.isPlacementValid) return;
+    if (!this.isPlacementValid(ship, row, col, isVertical)) return 'Invalid Placement';
     if (isVertical) {
       for (let i = 0; i < ship.length; i++) {
         this.board[row + i][col] = ship;
@@ -35,7 +35,22 @@ class Gameboard implements GameboardInterface {
     }
   }
 
-  private isPlacementValid(): boolean {
+  private isPlacementValid(
+    ship: Ship,
+    row: number,
+    col: number,
+    isVertical: boolean
+  ): boolean {
+    // invalid case when the ship is placed out of bounds
+    if (row < 0 || col < 0 || row > this.size - 1 || col > this.size - 1) {
+      return false;
+    }
+    // invalid case when the ship length runs out of bounds
+    if (row + ship.length > this.size || col + ship.length > this.size) {
+      return false;
+    }
+    // invalid case when the ship is placed on occupied spaces
+    
     return true;
   }
 }
