@@ -63,12 +63,20 @@ describe('The gameboard', () => {
     expect(game.placeShip(cruiser, 10, 10, false)).toBe('Invalid Placement');
   });
 
-  test('does not place a ship that runs out of bounds', () => {
+  test('does not place a ship horizontally that runs out of bounds', () => {
     expect(game.placeShip(submarine, 8, 8, false)).toBe('Invalid Placement');
   });
 
-  xtest('does not place a ship on occupied spaces', () => {
-    game.placeShip(destroyer, 4, 7, true)
+  test('does not place a ship vertically that runs out of bounds', () => {
+    expect(game.placeShip(battleship, 8, 0, true)).toBe('Invalid Placement');
+  });
+
+  test('does not place a ship horizontally on occupied spaces', () => {
+    game.placeShip(carrier, 4, 7, true);
     expect(game.placeShip(battleship, 5, 4, false)).toBe('Invalid Placement');
+  });
+  test('does not place a ship vertically on occupied spaces', () => {
+    game.placeShip(carrier, 7, 2, false);
+    expect(game.placeShip(destroyer, 6, 2, true)).toBe('Invalid Placement');
   });
 });
