@@ -54,14 +54,13 @@ class Gameboard implements GameboardInterface {
       if (col + ship.length > this.size) return false;
     }
     // invalid case when the ship is placed on occupied spaces
-    // [4, 5, 6, 7]
     if (isVertical) {
+      // this assignment creates an array of all row values based on the ship length
+      // Array(ship.length).keys() will create an array iterator from index 0 to the ship length
+      // then map over the array spread operator [...] to assign the correct row coordinates
       const allRowVals = [...Array(ship.length).keys()].map((el) => el + row);
       if (allRowVals.some((rowVal) => this.board[rowVal][col])) return false;
     } else {
-      // this assignment creates an array of all column values based on the ship length
-      // Array(ship.length).keys() will create an array iterator from index 0 to the ship length
-      // then map over the array spread operator [...] to assign the correct column coordinates
       const allColVals = [...Array(ship.length).keys()].map((el) => el + col);
       if (allColVals.some((colVal) => this.board[row][colVal])) return false;
     }
