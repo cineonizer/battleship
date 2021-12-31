@@ -54,21 +54,9 @@ class Gameboard implements GameboardInterface {
     } else {
       if (col + ship.length > this.size) return false;
     }
-    // invalid case when ships overlap
-    if (isVertical) {
-      // this assignment creates an array of all row values based on the ship length
-      // Array(ship.length).keys() will create an array iterator from index 0 to the ship length
-      // then map over the array spread operator [...] to assign the correct row coordinates
-      const allRowVals = [...Array(ship.length).keys()].map((el) => el + row);
-      if (allRowVals.some((rowVal) => this.board[rowVal][col])) return false;
-    } else {
-      const allColVals = [...Array(ship.length).keys()].map((el) => el + col);
-      if (allColVals.some((colVal) => this.board[row][colVal])) return false;
-    }
-
-    // invalid case when there are adjacent ships
-    // a getCoord method to return all possible neighboring coordinates of a cell
-    const getCoord = (row: number, col: number, index: number) => {
+    // invalid case for either overlapping or adjacent ships
+    // a get method to return all valid adjacent coordinates of a cell
+    const getAdajcentCoord = (row: number, col: number, index: number) => {
       const coordinates: { [key: string]: { row: number; col: number } } = {
         up: { row: row - 1, col: col },
         down: { row: row + 1, col: col },
@@ -79,6 +67,17 @@ class Gameboard implements GameboardInterface {
         downright: { row: row + 1, col: col + 1 },
         downleft: { row: row + 1, col: col - 1 },
       };
+      // directional invalidity occurs when a direction violates the bounds of the board or another ship cell
+      // examples of invalid directions for vertical ships:
+      // example 1: the first cell has an invalid down direction because a ship cell is beneath it
+      // example 2: the last cell has an invalid up direction because a ship cell is above it
+      // example 3: all the cells in between the first and last cells has invalid up and down directions
+      
+      // examples of invalid directions for horizontal ships:
+      // example 1: the first cell has an invalid right direction because there is a ship cell to its right
+      // example 2: the last cell has an invalid left direction because there is a ship cell to its left
+      // example 3: all the cells in between the first and last cells has invalid left and right directions
+
       // iterate through the coordinates object and delete any direction that is invalid
       for (const [dir, coord] of Object.entries(coordinates)) {
         if (isVertical) {
@@ -106,7 +105,7 @@ class Gameboard implements GameboardInterface {
             delete coordinates[dir];
           }
         }
-        // delete direction if it falls out of bounds
+        // delete a direction if it falls out of bounds of the board
         if (
           coord.row < 0 ||
           coord.row > this.size - 1 ||
@@ -120,16 +119,34 @@ class Gameboard implements GameboardInterface {
     };
 
     if (isVertical) {
+      // create an array of all the row values that the ship occupies
       const allRowVals = [...Array(ship.length).keys()].map((el) => el + row);
+      const allAdjacentCoord: {
+        [key: string]: { row: number; col: number };
+      }[] = [];
+      // for each (row, col) coordinate of the ship, push its adjacent cells' coordinates into a new array
+      allRowVals.forEach((row, idx) => {
+        allAdjacentCoord.push(getAdajcentCoord(row, col, idx));
+      });
+      // iterate through the array of all the adjacent coordinates and its directions
+      for (const adjacentCoord of allAdjacentCoord) {
+        for (const dir of Object.values(adjacentCoord)) {
+          if (this.board[dir.row][dir.col]) return false;
+        }
+      }
     } else {
       const allColVals = [...Array(ship.length).keys()].map((el) => el + col);
-      if (
-        allColVals.some((col, idx) => {
-          const allCoord = Object.values(getCoord(row, col, idx));
-          if (allCoord.some((coord) => this.board[coord.row][coord.col])) return true
-        })
-      )
-        return false;
+      const allAdjacentCoord: {
+        [key: string]: { row: number; col: number };
+      }[] = [];
+      allColVals.forEach((col, idx) => {
+        allAdjacentCoord.push(getAdajcentCoord(row, col, idx));
+      });
+      for (const adjacentCoord of allAdjacentCoord) {
+        for (const dir of Object.values(adjacentCoord)) {
+          if (this.board[dir.row][dir.col]) return false;
+        }
+      }
     }
     return true;
   }
