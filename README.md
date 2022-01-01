@@ -23,4 +23,10 @@ Implement the classic game of Battleship through the process of Test Driven Deve
 
 ## Learning Outcomes
 
-* Learned TypeScript syntax and usage and utilized it throughout the project.
+* Learned the effectiveness of TypeScript and utilized it throughout the project.
+* Learned TypeScript syntax:
+  * static and explicit types
+  * union and intersection types
+  * non-null assertion operator
+  * class interfaces
+  * private and protected methods
