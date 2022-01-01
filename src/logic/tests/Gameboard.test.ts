@@ -81,8 +81,17 @@ describe('The gameboard', () => {
     expect(game.placeShip(submarine, 6, 2, true)).toBe('Invalid Placement');
   });
 
-  test.only('does not place a ship that has adjacent ships', () => {
+  test('does not place a ship that has adjacent ships', () => {
     game.placeShip(cruiser, 3, 4, false);
     expect(game.placeShip(battleship, 4, 4, false)).toBe('Invalid Placement');
+    expect(game.placeShip(destroyer, 1, 5, true)).toBe('Invalid Placement');
+  });
+
+  test('receives an attack and hits a ship', () => {
+    let opponentShip: Ship;
+    game.placeShip(carrier, 6, 1, true);
+    game.receiveAttack(3, 1);
+    opponentShip = game.board[6][1]!;
+    expect(opponentShip.hits.includes(2)).toBe(true);
   });
 });

@@ -1,4 +1,3 @@
-import { check } from 'prettier';
 import Ship from './Ship';
 
 interface GameboardInterface {
@@ -6,6 +5,7 @@ interface GameboardInterface {
   board: (Ship | null)[][];
   initializeBoard(): null[][];
   placeShip(ship: Ship, row: number, col: number, isVertical: boolean): void;
+  receiveAttack(row: number, col: number): void;
 }
 
 class Gameboard implements GameboardInterface {
@@ -72,7 +72,7 @@ class Gameboard implements GameboardInterface {
       // example 1: the first cell has an invalid down direction because a ship cell is beneath it
       // example 2: the last cell has an invalid up direction because a ship cell is above it
       // example 3: all the cells in between the first and last cells has invalid up and down directions
-      
+
       // examples of invalid directions for horizontal ships:
       // example 1: the first cell has an invalid right direction because there is a ship cell to its right
       // example 2: the last cell has an invalid left direction because there is a ship cell to its left
@@ -149,6 +149,16 @@ class Gameboard implements GameboardInterface {
       }
     }
     return true;
+  }
+
+  receiveAttack(row: number, col: number) {
+    if (row < 0 || row > this.size - 1 || col < 0 || col > this.size - 1) {
+      return false;
+    }
+
+    if (this.board[row][col]) {
+      
+    }
   }
 }
 
