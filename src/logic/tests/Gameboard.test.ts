@@ -87,11 +87,22 @@ describe('The gameboard', () => {
     expect(game.placeShip(destroyer, 1, 5, true)).toBe('Invalid Placement');
   });
 
-  test('receives an attack and hits a ship', () => {
+  test('receives an attack and hits a horizontal ship', () => {
     let opponentShip: Ship;
-    game.placeShip(carrier, 6, 1, true);
+    game.placeShip(battleship, 3, 1, false);
+    game.receiveAttack(3, 3);
     game.receiveAttack(3, 1);
-    opponentShip = game.board[6][1]!;
-    expect(opponentShip.hits.includes(2)).toBe(true);
+    game.receiveAttack(3, 4);
+    opponentShip = game.board[3][1];
+    expect(opponentShip.hits).toEqual([2, 0, 3]);
+  });
+
+  test('receives an attack and hits a vertical ship', () => {
+    let opponentShip: Ship;
+    game.placeShip(battleship, 2, 6, true);
+    game.receiveAttack(2, 6);
+    game.receiveAttack(5, 6);
+    opponentShip = game.board[2][6];
+    expect(opponentShip.hits).toEqual([0, 3]);
   });
 });

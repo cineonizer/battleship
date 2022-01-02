@@ -2,7 +2,7 @@ import Ship from './Ship';
 
 interface GameboardInterface {
   size: number;
-  board: (Ship | null)[][];
+  board: Ship[][];
   initializeBoard(): null[][];
   placeShip(ship: Ship, row: number, col: number, isVertical: boolean): void;
   receiveAttack(row: number, col: number): void;
@@ -10,11 +10,11 @@ interface GameboardInterface {
 
 class Gameboard implements GameboardInterface {
   readonly size: number;
-  board: (Ship | null)[][];
+  board: Ship[][];
 
   constructor() {
     this.size = 10;
-    this.board = this.initializeBoard() as null[][];
+    this.board = this.initializeBoard() as Ship[][];
   }
 
   initializeBoard() {
@@ -155,9 +155,26 @@ class Gameboard implements GameboardInterface {
     if (row < 0 || row > this.size - 1 || col < 0 || col > this.size - 1) {
       return false;
     }
-
     if (this.board[row][col]) {
-      
+      let ship: Ship = this.board[row][col];
+      let index: number = 0;
+      // vertical ship layout
+      if (this.board[row - 1][col]) {
+        let i: number = 1;
+        while (this.board[row - i][col]) {
+          index++;
+          i++;
+        }
+      }
+      // horizontal ship layout
+      else if (this.board[row][col - 1]) {
+        let i: number = 1;
+        while (this.board[row][col - i]) {
+          index++;
+          i++;
+        }
+      }
+      ship.hit(index);
     }
   }
 }
