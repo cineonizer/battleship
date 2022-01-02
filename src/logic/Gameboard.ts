@@ -128,7 +128,7 @@ class Gameboard implements GameboardInterface {
       allRowVals.forEach((row, idx) => {
         allAdjacentCoord.push(getAdajcentCoord(row, col, idx));
       });
-      // iterate through the array of all the adjacent coordinates and its directions
+      // iterate through the array of all the adjacent coordinates and its directions to search for existing ships
       for (const adjacentCoord of allAdjacentCoord) {
         for (const dir of Object.values(adjacentCoord)) {
           if (this.board[dir.row][dir.col]) return false;
@@ -158,16 +158,14 @@ class Gameboard implements GameboardInterface {
     if (this.board[row][col]) {
       let ship: Ship = this.board[row][col];
       let index: number = 0;
-      // vertical ship layout
+      // check if there is a ship cell either up (vertical) or left (horizontal) then increment index
       if (this.board[row - 1][col]) {
         let i: number = 1;
         while (this.board[row - i][col]) {
           index++;
           i++;
         }
-      }
-      // horizontal ship layout
-      else if (this.board[row][col - 1]) {
+      } else if (this.board[row][col - 1]) {
         let i: number = 1;
         while (this.board[row][col - i]) {
           index++;
