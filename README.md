@@ -30,3 +30,4 @@ Implement the classic game of Battleship through the process of Test Driven Deve
   * non-null assertion operator
   * class interfaces
   * private and protected methods
+* Practiced Test Driven Development by writing unit tests for the logic.
